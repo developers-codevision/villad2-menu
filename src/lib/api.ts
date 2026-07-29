@@ -31,6 +31,7 @@ export interface Category {
   id: number;
   name: string;
   description: string | null;
+  price: string | null;
   active: boolean;
   order: number;
   menuId: number;

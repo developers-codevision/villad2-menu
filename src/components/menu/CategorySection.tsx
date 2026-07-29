@@ -1,5 +1,7 @@
 import type { Category } from "@/lib/api";
-import { parseBilingual } from "@/lib/bilingual";
+import { parseLang, parsePrice } from "@/lib/bilingual";
+import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/LanguageContext";
 import ProductRow from "./ProductRow";
 
 interface CategorySectionProps {
@@ -7,7 +9,9 @@ interface CategorySectionProps {
 }
 
 export default function CategorySection({ category }: CategorySectionProps) {
-  const { es, en } = parseBilingual(category.name);
+  const { language } = useLanguage();
+  const name = parseLang(category.name, language);
+  const description = category.description ? parseLang(category.description, language) : null;
   const activeProducts = category.categoryProducts.filter(
     (cp) => cp.product.active
   );
@@ -16,12 +20,16 @@ export default function CategorySection({ category }: CategorySectionProps) {
 
   return (
     <section className="mb-8">
-      <h3 className="text-lg font-bold mb-1">{es}</h3>
-      {en !== es && (
-        <p className="text-xs text-muted-foreground mb-3">{en}</p>
-      )}
-      {category.description && (
-        <p className="text-sm text-muted-foreground mb-3">{category.description}</p>
+      <div className="flex items-center gap-2 mb-1">
+        <h3 className="text-lg font-bold">{name}</h3>
+        {category.price && (
+          <Badge variant="secondary" className="text-xs font-mono bg-yellow-400 text-yellow-900">
+            ${parsePrice(category.price)}
+          </Badge>
+        )}
+      </div>
+      {description && (
+        <p className="text-sm text-muted-foreground mb-3">{description}</p>
       )}
       <div className="bg-card rounded-xl border divide-y divide-border/50">
         {activeProducts.map((cp) => (
@@ -31,6 +39,7 @@ export default function CategorySection({ category }: CategorySectionProps) {
               description={cp.product.description}
               price={cp.product.price}
               featured={cp.product.featured}
+              categoryPrice={category.price}
             />
           </div>
         ))}

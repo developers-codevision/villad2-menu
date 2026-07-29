@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -10,6 +11,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onMenuClick }: SidebarProps) {
+  const { language } = useLanguage();
   const { data: menus, isLoading, error } = useMenus();
 
   return (
@@ -24,7 +26,7 @@ export default function Sidebar({ isOpen, onMenuClick }: SidebarProps) {
       >
         <div className="p-4 border-b">
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            Menús
+            {language === "es" ? "Menús" : "Menus"}
           </h2>
         </div>
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
@@ -34,7 +36,9 @@ export default function Sidebar({ isOpen, onMenuClick }: SidebarProps) {
             ))}
           {error && (
             <p className="text-sm text-destructive px-3">
-              Error al cargar los menús
+              {language === "es"
+                ? "Error al cargar los menús"
+                : "Error loading menus"}
             </p>
           )}
           {menus?.map((menu) => (
