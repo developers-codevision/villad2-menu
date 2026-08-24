@@ -1,11 +1,15 @@
 import type { Language } from "@/contexts/LanguageContext";
 
+const ESCAPE_SENTINEL = '\u0000';
+
 export function parseBilingual(text: string): { es: string; en: string } {
-  const parts = text.split(" / ");
+  const protectedText = text.replace(/&\//g, ESCAPE_SENTINEL);
+  const parts = protectedText.split(" / ");
+  const restore = (s: string) => s.split(ESCAPE_SENTINEL).join('/');
   if (parts.length >= 2) {
-    return { es: parts[0].trim(), en: parts[1].trim() };
+    return { es: restore(parts[0]).trim(), en: restore(parts[1]).trim() };
   }
-  return { es: text, en: text };
+  return { es: restore(protectedText).trim(), en: restore(protectedText).trim() };
 }
 
 export function parseLang(text: string, language: Language): string {
@@ -13,7 +17,8 @@ export function parseLang(text: string, language: Language): string {
   return language === "es" ? es : en;
 }
 
-export function parsePrice(price: string | number): string {
+export function parsePrice(price: string | number | null | undefined): string {
+  if (price == null || price === "") return "";
   const num = typeof price === "string" ? Number(price) : price;
-  return num.toFixed(2);
+  return num == null || Number.isNaN(num) ? "" : num.toFixed(2);
 }
