@@ -25,6 +25,36 @@ export default function HomePage({ sidebarOpen, onCloseSidebar }: HomePageProps)
   const { data: menus, isLoading: menusLoading } = useMenus();
 
   useEffect(() => {
+    const menuName = menu ? parseLang(menu.name, language) : null;
+    const siteTitle = "Hostal Boutique Villa D2";
+    const title = menuName
+      ? `${menuName} | ${siteTitle}`
+      : `Menú Digital | ${siteTitle}`;
+    document.title = title;
+
+    const setMeta = (attr: "name" | "property", key: string, content: string) => {
+      let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, key);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
+    };
+
+    setMeta("name", "description", menuName
+      ? `${menuName} del Hostal Boutique Villa D2. Horario, productos y precios.`
+      : "Explora los menús digitales del Hostal Boutique Villa D2 en La Habana, Cuba.");
+    setMeta("property", "og:title", title);
+    setMeta("property", "og:description", menuName
+      ? `${menuName} del Hostal Boutique Villa D2.`
+      : "Explora los menús digitales del Hostal Boutique Villa D2 en La Habana, Cuba.");
+    setMeta("property", "og:url", menuId
+      ? `https://menu.villad2.com/${menuId}`
+      : "https://menu.villad2.com");
+  }, [menu, language, menuId]);
+
+  useEffect(() => {
     if (!menusLoading && menus && menus.length > 0 && !menuId) {
       navigate(`/${menus[0].id}`, { replace: true });
     }
