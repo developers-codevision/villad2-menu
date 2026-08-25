@@ -18,8 +18,6 @@ export default function CategorySection({ category }: CategorySectionProps) {
     (cp) => cp.product.active
   );
 
-  if (activeProducts.length === 0) return null;
-
   return (
     <section className="mb-8">
       {!isGeneral && (
@@ -35,6 +33,7 @@ export default function CategorySection({ category }: CategorySectionProps) {
       {!isGeneral && description && (
         <p className="text-sm text-muted-foreground mb-3">{description}</p>
       )}
+      {activeProducts.length > 0 && (
       <div className="bg-card rounded-xl border divide-y divide-border/50">
         {activeProducts.map((cp) => (
           <div key={cp.productId} className="px-4">
@@ -48,6 +47,7 @@ export default function CategorySection({ category }: CategorySectionProps) {
           </div>
         ))}
       </div>
+      )}
     </section>
   );
 }
