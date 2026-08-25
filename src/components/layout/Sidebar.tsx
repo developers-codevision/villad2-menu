@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { parseLang } from "@/lib/bilingual";
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -54,7 +55,7 @@ export default function Sidebar({ isOpen, onMenuClick }: SidebarProps) {
                 }`
               }
             >
-              <span>{menu.name}</span>
+              <span>{parseLang(menu.name, language)}</span>
               {menu.schedule && (
                 <span className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Clock className="h-3 w-3" />

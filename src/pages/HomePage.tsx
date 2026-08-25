@@ -8,6 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { UtensilsCrossed } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { parseLang } from "@/lib/bilingual";
 
 interface HomePageProps {
   sidebarOpen: boolean;
@@ -17,6 +19,7 @@ interface HomePageProps {
 export default function HomePage({ sidebarOpen, onCloseSidebar }: HomePageProps) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { language } = useLanguage();
   const menuId = id ? Number(id) : null;
   const { data: menu, isLoading, error } = useMenu(menuId);
   const { data: menus, isLoading: menusLoading } = useMenus();
@@ -59,7 +62,7 @@ export default function HomePage({ sidebarOpen, onCloseSidebar }: HomePageProps)
         {menu && (
           <>
             <div className="mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold">{menu.name}</h2>
+              <h2 className="text-2xl md:text-3xl font-bold">{parseLang(menu.name, language)}</h2>
               {menu.description && (
                 <p className="text-muted-foreground mt-1">{menu.description}</p>
               )}
