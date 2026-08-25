@@ -12,6 +12,7 @@ export default function CategorySection({ category }: CategorySectionProps) {
   const { language } = useLanguage();
   const name = parseLang(category.name, language);
   const description = category.description ? parseLang(category.description, language) : null;
+  const categoryPriceFormatted = parsePrice(category.price);
   const activeProducts = category.categoryProducts.filter(
     (cp) => cp.product.active
   );
@@ -22,9 +23,9 @@ export default function CategorySection({ category }: CategorySectionProps) {
     <section className="mb-8">
       <div className="flex items-center gap-2 mb-1">
         <h3 className="text-lg font-bold">{name}</h3>
-        {category.price && (
+        {categoryPriceFormatted && (
           <Badge variant="secondary" className="text-xs font-mono bg-yellow-400 text-yellow-900">
-            ${parsePrice(category.price)}
+            ${categoryPriceFormatted}
           </Badge>
         )}
       </div>

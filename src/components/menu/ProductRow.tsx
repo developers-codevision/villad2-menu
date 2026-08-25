@@ -6,7 +6,7 @@ import { Star } from "lucide-react";
 interface ProductRowProps {
   name: string;
   description: string | null;
-  price: string;
+  price: string | null;
   featured: boolean;
   categoryPrice?: string | null;
 }
@@ -16,7 +16,7 @@ export default function ProductRow({ name, description, price, featured, categor
   const displayName = parseLang(name, language);
   const desc = description ? parseLang(description, language) : null;
 
-  const hidePrice = categoryPrice && (price === "0" || price === "0.00");
+  const hidePrice = !parsePrice(price) || (categoryPrice && (price === "0" || price === "0.00"));
 
   return (
     <div className="flex items-start justify-between gap-4 py-3 border-b border-border/50 last:border-0">
