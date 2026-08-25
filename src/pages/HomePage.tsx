@@ -91,7 +91,12 @@ export default function HomePage({ sidebarOpen, onCloseSidebar }: HomePageProps)
         )}
         {menu && (
           <>
-            <div className="mb-8">
+            <div className="flex flex-col items-center text-center mb-8">
+              <img
+                src="/logo.png"
+                alt="Hostal Boutique Villa D2"
+                className="w-24 h-auto mb-3"
+              />
               <h2 className="text-2xl md:text-3xl font-bold">{parseLang(menu.name, language)}</h2>
               {menu.description && (
                 <p className="text-muted-foreground mt-1">{menu.description}</p>
