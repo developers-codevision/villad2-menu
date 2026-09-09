@@ -1,52 +1,42 @@
-import { Utensils, Menu, X, Languages } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Languages } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-interface HeaderProps {
-  onToggleMenu?: () => void;
-  isMenuOpen?: boolean;
-}
-
-export default function Header({ onToggleMenu, isMenuOpen }: HeaderProps) {
+export default function Header() {
   const { language, toggleLanguage } = useLanguage();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="bg-primary rounded-full p-2">
-            <Utensils className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold leading-tight">Villa D2</h1>
-            <p className="text-xs text-muted-foreground">
-              {language === "es" ? "Menú Digital" : "Digital Menu"}
-            </p>
+    <header className="relative">
+      <div className="bg-gradient-to-b from-primary to-amber-500 pt-5 pb-12 px-6 text-center">
+        <button
+          onClick={toggleLanguage}
+          className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white hover:bg-white/30 transition-colors"
+          aria-label="Cambiar idioma"
+        >
+          <Languages className="h-3.5 w-3.5" />
+          {language.toUpperCase()}
+        </button>
+
+        <div className="relative w-32 h-32 mx-auto mb-2">
+          <span className="absolute inset-0 rounded-full bg-white/40 animate-ring" />
+          <span className="absolute inset-0 rounded-full bg-white/40 animate-ring [animation-delay:1s]" />
+          <div className="relative w-32 h-32 rounded-full bg-white shadow-lg flex items-center justify-center animate-float">
+            <img
+              src="/logo.png"
+              alt="Hostal Boutique Villa D2"
+              className="w-20 h-20 object-contain"
+            />
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleLanguage}
-            className="flex items-center gap-1.5"
-            aria-label="Cambiar idioma"
-          >
-            <Languages className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase">{language}</span>
-          </Button>
-          {onToggleMenu && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onToggleMenu}
-              className="lg:hidden"
-            >
-              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-          )}
-        </div>
+        <h1 className="text-2xl font-bold text-white drop-shadow-sm">
+          {language === "es" ? "Menú Digital" : "Digital Menu"}
+        </h1>
+        <p className="text-white/80 text-xs mt-1 font-light">
+          Hostal Boutique Villa D2 · La Habana
+        </p>
       </div>
+
+      {/* Curva */}
+      <div className="h-5 bg-background rounded-t-[50%] -mt-5 relative z-10" />
     </header>
   );
 }

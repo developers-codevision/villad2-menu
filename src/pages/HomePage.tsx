@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useMenu } from "@/hooks/useMenu";
 import { useMenus } from "@/hooks/useMenus";
-import Sidebar from "@/components/layout/Sidebar";
 import CategorySection from "@/components/menu/CategorySection";
 import SubtitleBar from "@/components/menu/SubtitleBar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,12 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { parseLang } from "@/lib/bilingual";
 
-interface HomePageProps {
-  sidebarOpen: boolean;
-  onCloseSidebar: () => void;
-}
-
-export default function HomePage({ sidebarOpen, onCloseSidebar }: HomePageProps) {
+export default function HomePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { language } = useLanguage();
@@ -61,69 +55,44 @@ export default function HomePage({ sidebarOpen, onCloseSidebar }: HomePageProps)
   }, [menus, menusLoading, menuId, navigate]);
 
   return (
-    <div className="flex min-h-[calc(100vh-8rem)]">
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={onCloseSidebar}
-        />
+    <main className="max-w-lg mx-auto w-full px-4 py-4">
+      {!menuId && !isLoading && (
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <div className="text-center">
+            <UtensilsCrossed className="h-12 w-12 mx-auto text-muted-foreground/40 mb-4" />
+            <p className="text-muted-foreground">Selecciona un menú</p>
+          </div>
+        </div>
       )}
-      <Sidebar isOpen={sidebarOpen} onMenuClick={onCloseSidebar} />
-      <main className="flex-1 p-4 md:p-8 overflow-y-auto">
-        {!menuId && !isLoading && (
-          <div className="flex items-center justify-center min-h-[calc(100vh-12rem)]">
-            <div className="text-center">
-              <UtensilsCrossed className="h-12 w-12 mx-auto text-muted-foreground/40 mb-4" />
-              <p className="text-muted-foreground">Selecciona un menú del panel lateral</p>
-            </div>
+      {!menuId && isLoading && (
+        <div className="space-y-6">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+          <div className="space-y-3 mt-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-16 w-full rounded-xl" />
+            ))}
           </div>
-        )}
-        {!menuId && isLoading && (
-          <div className="space-y-6">
-            <Skeleton className="h-8 w-48" />
-            <Skeleton className="h-4 w-72" />
-            <div className="space-y-3 mt-8">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <Skeleton key={i} className="h-16 w-full rounded-xl" />
-              ))}
-            </div>
-          </div>
-        )}
-        {menu && (
-          <>
-            <div className="flex flex-col items-center text-center mb-8">
-              <img
-                src="/logo.png"
-                alt="Hostal Boutique Villa D2"
-                className="w-24 h-auto mb-3"
-              />
-              <h2 className="text-2xl md:text-3xl font-bold">{parseLang(menu.name, language)}</h2>
-              {menu.description && (
-                <p className="text-muted-foreground mt-1">{menu.description}</p>
-              )}
-              {menu.schedule && (
-                <p className="text-sm text-muted-foreground/70 mt-1">
-                  Horario: {menu.schedule}
-                </p>
-              )}
-            </div>
-            {menu.categories
-              .filter((c) => c.active)
-              .map((category) => (
-                <CategorySection key={category.id} category={category} />
-              ))}
-            <SubtitleBar subtitles={menu.subtitulos} />
-          </>
-        )}
-        {error && (
-          <div className="text-center py-12">
-            <p className="text-destructive font-medium">Error al cargar el menú</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              {(error as Error).message}
-            </p>
-          </div>
-        )}
-      </main>
-    </div>
+        </div>
+      )}
+      {menu && (
+        <>
+          {menu.categories
+            .filter((c) => c.active)
+            .map((category) => (
+              <CategorySection key={category.id} category={category} />
+            ))}
+          <SubtitleBar subtitles={menu.subtitulos} />
+        </>
+      )}
+      {error && (
+        <div className="text-center py-12">
+          <p className="text-destructive font-medium">Error al cargar el menú</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {(error as Error).message}
+          </p>
+        </div>
+      )}
+    </main>
   );
 }

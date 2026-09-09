@@ -1,6 +1,5 @@
 import type { Category } from "@/lib/api";
 import { parseLang, parsePrice } from "@/lib/bilingual";
-import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ProductRow from "./ProductRow";
 
@@ -19,35 +18,36 @@ export default function CategorySection({ category }: CategorySectionProps) {
   );
 
   return (
-    <section className="mb-8">
-      {!isGeneral && (
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="text-lg font-bold">{name}</h3>
-          {categoryPriceFormatted && (
-            <Badge variant="secondary" className="text-xs font-mono bg-yellow-400 text-yellow-900">
-              ${categoryPriceFormatted}
-            </Badge>
-          )}
-        </div>
-      )}
-      {!isGeneral && description && (
-        <p className="text-sm text-muted-foreground mb-3">{description}</p>
-      )}
-      {activeProducts.length > 0 && (
-      <div className="bg-card rounded-xl border divide-y divide-border/50">
-        {activeProducts.map((cp) => (
-          <div key={cp.productId} className="px-4">
-            <ProductRow
-              name={cp.product.name}
-              description={cp.product.description}
-              price={cp.product.price}
-              featured={cp.product.featured}
-              categoryPrice={category.price}
-            />
+    <section id={`cat-${category.id}`} className="mb-4 scroll-mt-20">
+      <div className="bg-gradient-to-br from-amber-50 to-card rounded-2xl shadow-md p-4 border border-amber-100/50">
+        {!isGeneral && (
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <h3 className="text-sm font-semibold">{name}</h3>
+            {categoryPriceFormatted && (
+              <span className="text-xs font-semibold text-primary-foreground bg-primary px-2.5 py-0.5 rounded-full shrink-0">
+                ${categoryPriceFormatted}
+              </span>
+            )}
           </div>
-        ))}
+        )}
+        {!isGeneral && description && (
+          <p className="text-xs text-muted-foreground mb-2">{description}</p>
+        )}
+        {activeProducts.length > 0 && (
+          <div className="divide-y divide-border/50">
+            {activeProducts.map((cp) => (
+              <ProductRow
+                key={cp.productId}
+                name={cp.product.name}
+                description={cp.product.description}
+                price={cp.product.price}
+                featured={cp.product.featured}
+                categoryPrice={category.price}
+              />
+            ))}
+          </div>
+        )}
       </div>
-      )}
     </section>
   );
 }
