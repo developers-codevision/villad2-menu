@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Bot } from "lucide-react";
+import { X, Send } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Message {
@@ -77,7 +77,11 @@ export default function ChatWidget() {
           className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-105 transition-transform flex items-center justify-center"
           aria-label="Chat"
         >
-          <MessageCircle className="h-6 w-6" />
+          <img
+            src="/profile.png"
+            alt="Asistente"
+            className="w-full h-full object-cover rounded-full ring-2 ring-primary-foreground/60"
+          />
         </button>
       )}
 
@@ -86,9 +90,13 @@ export default function ChatWidget() {
         <div className="fixed bottom-20 right-5 z-50 w-[340px] max-w-[calc(100vw-2.5rem)] h-[480px] max-h-[calc(100vh-6rem)] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden max-sm:right-2 max-sm:bottom-2 max-sm:w-[calc(100vw-1rem)] max-sm:h-[65vh]">
           {/* Header */}
           <div className="bg-primary px-4 py-3 flex items-center gap-2">
-            <Bot className="h-5 w-5 text-primary-foreground" />
+            <img
+              src="/profile.png"
+              alt=""
+              className="h-8 w-8 rounded-full object-cover ring-2 ring-primary-foreground/50"
+            />
             <span className="text-primary-foreground font-semibold text-sm flex-1">
-              {language === "es" ? "Asistente Villa D2" : "Villa D2 Assistant"}
+              Villita
             </span>
             <button
               onClick={() => setIsOpen(false)}
@@ -102,7 +110,11 @@ export default function ChatWidget() {
           <div className="flex-1 overflow-y-auto p-3 space-y-3">
             {messages.length === 0 && (
               <div className="text-center text-muted-foreground text-sm mt-8">
-                <Bot className="h-8 w-8 mx-auto mb-2 opacity-40" />
+                <img
+                  src="/profile.png"
+                  alt=""
+                  className="h-14 w-14 rounded-full object-cover mx-auto mb-2 ring-2 ring-border"
+                />
                 {language === "es"
                   ? "¡Hola! Pregúntame sobre precios, platos, horarios..."
                   : "Hi! Ask me about prices, dishes, schedules..."}
@@ -111,8 +123,15 @@ export default function ChatWidget() {
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
+                {msg.role === "assistant" && (
+                  <img
+                    src="/profile.png"
+                    alt=""
+                    className="h-6 w-6 rounded-full object-cover self-end shrink-0 ring-1 ring-border"
+                  />
+                )}
                 <div
                   className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm ${
                     msg.role === "user"

@@ -1,6 +1,9 @@
 import type { Category } from "@/lib/api";
+import { mediaUrl } from "@/lib/api";
 import { parseLang, parsePrice } from "@/lib/bilingual";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useInView } from "@/hooks/useInView";
+import { useEffect, useRef } from "react";
 import ProductRow from "./ProductRow";
 
 interface CategorySectionProps {
@@ -16,10 +19,22 @@ export default function CategorySection({ category }: CategorySectionProps) {
   const activeProducts = category.categoryProducts.filter(
     (cp) => cp.product.active
   );
+  const { ref, inView } = useInView<HTMLDivElement>(0.2);
+  const bannerRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const el = bannerRef.current;
+    if (!el) return;
+    if (inView) {
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+    }
+  }, [inView]);
 
   return (
     <section id={`cat-${category.id}`} className="mb-4 scroll-mt-20">
-      <div className="bg-gradient-to-br from-amber-50 to-card rounded-2xl shadow-md p-4 border border-amber-100/50">
+      <div ref={ref} className="bg-gradient-to-br from-amber-50 to-card rounded-2xl shadow-md p-4 border border-amber-100/50">
         {!isGeneral && (
           <div className="flex items-center justify-between gap-3 mb-1">
             <h3 className="text-sm font-semibold">{name}</h3>
@@ -33,8 +48,19 @@ export default function CategorySection({ category }: CategorySectionProps) {
         {!isGeneral && description && (
           <p className="text-xs text-muted-foreground mb-2">{description}</p>
         )}
+        {category.video && (
+          <video
+            ref={bannerRef}
+            src={mediaUrl(category.video)}
+            className="w-full max-w-64 aspect-square mx-auto object-cover rounded-2xl mb-3 bg-black shadow-md ring-1 ring-black/10"
+            muted
+            loop
+            playsInline
+            preload="metadata"
+          />
+        )}
         {activeProducts.length > 0 && (
-          <div className="divide-y divide-border/50">
+          <div className="space-y-3">
             {activeProducts.map((cp) => (
               <ProductRow
                 key={cp.productId}
@@ -42,6 +68,8 @@ export default function CategorySection({ category }: CategorySectionProps) {
                 description={cp.product.description}
                 price={cp.product.price}
                 featured={cp.product.featured}
+                video={cp.product.video}
+                images={cp.product.images}
                 categoryPrice={category.price}
               />
             ))}

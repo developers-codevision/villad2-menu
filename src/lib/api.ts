@@ -1,5 +1,12 @@
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
+/** Absolute URL for media paths stored as "media/..." or "/media/...". */
+export function mediaUrl(path: string | null): string {
+  if (!path) return "";
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+  return `${API_BASE}/${path.replace(/^\//, "")}`;
+}
+
 export interface MenuListItem {
   id: number;
   name: string;
@@ -13,9 +20,11 @@ export interface Product {
   id: number;
   name: string;
   description: string | null;
-  price: string;
+  price: string | null;
   active: boolean;
   featured: boolean;
+  video: string | null;
+  images: string | null; // JSON array of relative paths
   createdAt: string;
   updatedAt: string;
 }
@@ -35,6 +44,7 @@ export interface Category {
   active: boolean;
   order: number;
   menuId: number;
+  video: string | null;
   createdAt: string;
   updatedAt: string;
   categoryProducts: CategoryProduct[];
