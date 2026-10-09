@@ -51,7 +51,6 @@ export default function CategorySection({ category }: CategorySectionProps) {
         {category.video && (
           <MenuVideo
             src={category.video}
-            load={inView}
             videoRef={bannerRef}
             wrapperClassName="w-full max-w-64 aspect-square mx-auto mb-3 rounded-2xl bg-black shadow-md ring-1 ring-black/10"
             className="w-full h-full object-cover"

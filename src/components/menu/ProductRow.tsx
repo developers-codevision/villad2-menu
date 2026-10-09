@@ -54,7 +54,6 @@ export default function ProductRow({ name, description, price, featured, video, 
       {video && (
         <MenuVideo
           src={video}
-          load={inView}
           videoRef={videoRef}
           wrapperClassName="aspect-square bg-black"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
