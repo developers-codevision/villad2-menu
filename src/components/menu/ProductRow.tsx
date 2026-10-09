@@ -3,6 +3,7 @@ import { parseLang, parsePrice } from "@/lib/bilingual";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { mediaUrl } from "@/lib/api";
 import { useInView } from "@/hooks/useInView";
+import MenuVideo from "./MenuVideo";
 import { Star } from "lucide-react";
 
 interface ProductRowProps {
@@ -51,14 +52,12 @@ export default function ProductRow({ name, description, price, featured, video, 
       className="group overflow-hidden rounded-2xl bg-card border border-border/60 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
     >
       {video && (
-        <video
-          ref={videoRef}
-          src={mediaUrl(video)}
-          className="w-full aspect-square object-cover bg-black transition-transform duration-500 group-hover:scale-[1.03]"
-          muted
-          loop
-          playsInline
-          preload="metadata"
+        <MenuVideo
+          src={video}
+          load={inView}
+          videoRef={videoRef}
+          wrapperClassName="aspect-square bg-black"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
       )}
       {gallery.length > 0 && (

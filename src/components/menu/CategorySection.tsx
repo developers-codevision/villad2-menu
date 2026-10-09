@@ -1,9 +1,9 @@
 import type { Category } from "@/lib/api";
-import { mediaUrl } from "@/lib/api";
 import { parseLang, parsePrice } from "@/lib/bilingual";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useInView } from "@/hooks/useInView";
 import { useEffect, useRef } from "react";
+import MenuVideo from "./MenuVideo";
 import ProductRow from "./ProductRow";
 
 interface CategorySectionProps {
@@ -49,14 +49,12 @@ export default function CategorySection({ category }: CategorySectionProps) {
           <p className="text-xs text-muted-foreground mb-2">{description}</p>
         )}
         {category.video && (
-          <video
-            ref={bannerRef}
-            src={mediaUrl(category.video)}
-            className="w-full max-w-64 aspect-square mx-auto object-cover rounded-2xl mb-3 bg-black shadow-md ring-1 ring-black/10"
-            muted
-            loop
-            playsInline
-            preload="metadata"
+          <MenuVideo
+            src={category.video}
+            load={inView}
+            videoRef={bannerRef}
+            wrapperClassName="w-full max-w-64 aspect-square mx-auto mb-3 rounded-2xl bg-black shadow-md ring-1 ring-black/10"
+            className="w-full h-full object-cover"
           />
         )}
         {activeProducts.length > 0 && (
